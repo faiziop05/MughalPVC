@@ -38,6 +38,7 @@ const NewMeasure: React.FC = () => {
 
   const roomdata =
     typeof params?.item === "string" ? JSON.parse(params.item) : null;
+  const roomDate = params.date;
 
   const navigation = useNavigation();
   const categoryItems = useSelector(selectCategoryItems);
@@ -183,16 +184,29 @@ const NewMeasure: React.FC = () => {
 
   const handleSaveData = async () => {
     try {
-      dispatch(
-        setRoom([...roomsHistory, { rooms, date: new Date().toLocaleString() }])
-      );
-      await AsyncStorage.setItem(
-        "roomHistory",
-        JSON.stringify([
-          ...roomsHistory,
-          { rooms, date: new Date().toLocaleString() },
-        ])
-      );
+      console.log(roomDate, "aaaaaaa");
+
+      if (roomDate != null) {
+        const newData = roomsHistory.map((item: any) =>
+          item.date == roomDate ? { rooms, date: roomDate } : item
+        );
+        dispatch(setRoom(newData));
+      } else {
+        console.log("sssssssssssss in null");
+        dispatch(
+          setRoom([
+            ...roomsHistory,
+            { rooms, date: new Date().toLocaleString() },
+          ])
+        );
+        await AsyncStorage.setItem(
+          "roomHistory",
+          JSON.stringify([
+            ...roomsHistory,
+            { rooms, date: new Date().toLocaleString() },
+          ])
+        );
+      }
       navigation.goBack();
     } catch (error) {
       console.log(error);
@@ -271,8 +285,8 @@ const NewMeasure: React.FC = () => {
       const tileWidth = selectedCeilingType[0]?.width / 12; // Convert inches to feet
       const tileLength = selectedCeilingType[0]?.height / 12; // Convert inches to feet
 
-      const tilesInRow = Math.floor(avgWidth / tileWidth);
-      const tilesInColumn = Math.floor(avgLength / tileLength);
+      const tilesInRow = Math.ceil(avgWidth / tileWidth);
+      const tilesInColumn = Math.ceil(avgLength / tileLength);
 
       ceilingAreaFeet = avgLength * avgWidth;
       const ceilingSheetDimentionInFeet =
@@ -285,8 +299,8 @@ const NewMeasure: React.FC = () => {
       totalMainT12ft = Math.ceil(totalLengthMainT / 12) - 1;
 
       // Calculate Small Ts
-      const smallTsPerColumn = tilesInColumn - 1; // Separations between tiles in a column
-      totalCrossT2ft = smallTsPerColumn * tilesInRow;
+      const totalSmallTsinRow = tilesInRow - 1;
+      totalCrossT2ft = totalSmallTsinRow * tilesInColumn;
 
       // L-Angle
       const totalPerimeter = 2 * (avgLength + avgWidth);
@@ -576,7 +590,10 @@ const NewMeasure: React.FC = () => {
         </View>
       )}
       {isNewRoomPressed && (
-        <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={styles.container}
+        >
           {/* Room Dimensions */}
           <Section title="Room Dimensions">
             {walls.map((value, index) => (

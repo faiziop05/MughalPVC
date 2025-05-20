@@ -31,6 +31,7 @@ const ManageSupportingMaterial = () => {
   const [selectedCategory, setSelectedCategory] = useState<Option | null>(null);
   const [wantToAddMaterial, setWantToAddMaterial] = useState(false);
 
+  
   const [materialName, setMaterialName] = useState("");
   const [materialPrice, setMaterialPrice] = useState("");
   const [materialLength, setMaterialLength] = useState("");

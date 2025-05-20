@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
     shadowRadius: 4,
     elevation: 2,
+    margin:5
   },
   switchWrapper: {
     flexDirection: "row",

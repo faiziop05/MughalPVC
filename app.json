@@ -4,20 +4,22 @@
     "slug": "MughalPVC",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/adaptive-icon4.png",
     "scheme": "mughalpvc",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true
     },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "edgeToEdgeEnabled": true
-    },
+"android": {
+  "adaptiveIcon": {
+    "foregroundImage": "./assets/images/adaptive-icon4.png",
+    "backgroundColor": "#ffffff"
+  },
+  "jsEngine": "hermes",
+  "edgeToEdgeEnabled": true,
+  "package": "com.faiziop05.MughalPVC"
+},
     "web": {
       "bundler": "metro",
       "output": "static",

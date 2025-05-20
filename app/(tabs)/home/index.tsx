@@ -58,10 +58,9 @@ const index: React.FC = () => {
   const todayHistory =
     roomsHistory?.filter((item: any) => isToday(item.date)) || [];
 
-
   const dateHandler = (da: any) => {
     console.log(da);
-    
+
     if (!da || typeof da !== "string") {
       return { date: "Invalid Date", time: "Invalid Time" };
     }
@@ -78,12 +77,12 @@ const index: React.FC = () => {
       "0"
     )}`;
     const time12 = timePart;
-    return { date:  dateFormatted, time:  time12 };
+    return { date: dateFormatted, time: time12 };
   };
   const groupedByDate: { [key: string]: any[] } = {};
   roomsHistory?.forEach((item: any) => {
     console.log(item);
-    
+
     if (!isToday(item.date)) {
       const date = dateHandler(item?.date)?.date;
       if (!groupedByDate[date]) groupedByDate[date] = [];
@@ -91,20 +90,20 @@ const index: React.FC = () => {
     }
   });
   return (
-    <ScreenWrapper  scroll edges={["left", "right"]}>
+    <ScreenWrapper scroll edges={["left", "right"]}>
       <Button
         onPress={() => navigation.navigate("newMeasure" as never)}
         title="New Measurement"
       />
-      <Section containerStyle={{marginTop:20}}   title="History">
+      <Section containerStyle={{ marginTop: 20 }} title="History">
         {todayHistory.length > 0 && (
           <Section containerStyle={styles.InnerSectionStyles} title="Today">
-            {todayHistory.map((item: any, index: number) => (
+            {todayHistory.reverse().map((item: any, index: number) => (
               <Link
                 key={`today-${index}`}
                 href={{
                   pathname: "/home/newMeasure",
-                  params: { item: JSON.stringify(item.rooms) },
+                  params: { item: JSON.stringify(item.rooms), date: item.date },
                 }}
                 asChild
               >
@@ -125,14 +124,18 @@ const index: React.FC = () => {
           </Section>
         )}
 
-        {Object.keys(groupedByDate).map((date) => (
-          <Section  key={date} containerStyle={[styles.InnerSectionStyles,{marginTop:20}]} title={date}>
+        {Object.keys(groupedByDate).reverse().map((date) => (
+          <Section
+            key={date}
+            containerStyle={[styles.InnerSectionStyles, { marginTop: 20 }]}
+            title={date}
+          >
             {groupedByDate[date].map((item: any, index: number) => (
               <Link
                 key={`${date}-${index}`}
                 href={{
                   pathname: "/home/newMeasure",
-                  params: { item: JSON.stringify(item.rooms) },
+                  params: { item: JSON.stringify(item.rooms), date: item.date },
                 }}
                 asChild
               >
@@ -172,7 +175,7 @@ const styles = StyleSheet.create({
   link: {
     fontSize: 16,
   },
-    InnerSectionStyles: {
+  InnerSectionStyles: {
     marginBottom: 10,
     backgroundColor: COLORS().background,
     paddingHorizontal: 10,
